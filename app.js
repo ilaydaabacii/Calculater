@@ -19,7 +19,7 @@ const Product = function(id,name,price){
 }
 
 const data = {
-    Product : [
+    products : [
         {id:0, name: 'monitör', price: 100},
         {id:0, name: 'Ram', price: 30},
         {id:0, name: 'Klavye', price: 10}
@@ -30,7 +30,7 @@ const data = {
 //public
 return {
     getProducts: function(){
-        return data.Product;
+        return data.products;
     },
     getData: function(){
         return data;
@@ -45,7 +45,11 @@ return {
 const UIController = (function(){
 
     const Selectors = {
-        productList : "#item-list"
+        productList : "#item-list",
+        addButton : '.addBtn',
+        productName: '#productName',
+        productPrice: '#productPrice'
+
     }
     return {
         createProductList: function(products){
@@ -64,7 +68,7 @@ const UIController = (function(){
                     </tr>
                 `;
             });
-            document.querySelector('Selector.productList').innerHTML= html;
+            document.querySelector(Selectors.productList).innerHTML= html;
         },
         getSelectors : function(){
             return Selectors;
@@ -77,6 +81,21 @@ const UIController = (function(){
 //Ana modül App Controller
 
 const App = (function(ProductCtrl,UICtrl){
+    const UISelectors = UIController.getSelectors();
+
+    //Load Event Listener
+    const loadEventListeners =function(){
+        //add product event
+        document.querySelector(UISelectors.addButton).addEventListener('click',productAddSubmit);
+
+    }
+    const productAddSubmit= function(e){
+        const productName= document.querySelector(UISelectors.productName).value;
+        const productPrice= document.querySelector(UISelectors.productPrice).value;
+        console.log(productName,productPrice);
+  
+        e.preventDefault();
+    }
 
     return {
         init: function(){
@@ -84,6 +103,9 @@ const App = (function(ProductCtrl,UICtrl){
             const products = ProductCtrl.getProducts();
 
             UICtrl.createProductList(products);
+            
+            //load event listener
+            loadEventListeners();
         }
     }
 
